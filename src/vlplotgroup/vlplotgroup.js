@@ -7,7 +7,7 @@
  * # visListItem
  */
 angular.module('vlui')
-  .directive('vlPlotGroup', function (Bookmarks, consts, vl, Dataset, Drop, Logger) {
+  .directive('vlPlotGroup', function (consts, vl, Dataset, Drop, Logger, Spec) {
     return {
       templateUrl: 'vlplotgroup/vlplotgroup.html',
       restrict: 'E',
@@ -50,7 +50,7 @@ angular.module('vlui')
         expandAction: '&',
       },
       link: function postLink(scope, element) {
-        scope.Bookmarks = Bookmarks;
+
         scope.consts = consts;
         scope.Dataset = Dataset;
 
@@ -128,6 +128,12 @@ angular.module('vlui')
         scope.transpose = function() {
           Logger.logInteraction(Logger.actions.TRANSPOSE_TOGGLE, scope.chart.shorthand);
           vl.Encoding.transpose(scope.chart.vlSpec);
+        };
+
+        scope.chartChange = function(chartType) {
+          Spec.spec.marktype = chartType;
+          scope.chart.vlSpec.marktype = chartType;
+          Logger.logInteraction(Logger.actions.MARK_CHANGE, scope.chart.vlSpec.marktype);
         };
 
         scope.$on('$destroy', function() {

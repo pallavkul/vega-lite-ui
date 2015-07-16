@@ -43,14 +43,26 @@
           </div>
         </div>
       </div>
-      <a ng-if="showMarkType"
-        class="command disabled">
-        <i class="fa fa-font"></i>
-        <i class="fa fa-line-chart"></i>
-        <i class="fa fa-area-chart"></i>
-        <i class="fa fa-bar-chart"></i>
+      <a class="command" title="Point" ng-click="chartChange('point')">
         <i class="fa fa-circle-o"></i>
       </a>
+      <a class="command" title="Bar" ng-click="chartChange('bar')">
+        <i class="fa fa-bar-chart"></i>
+      </a>
+      <a class="command" title="Area" ng-click="chartChange('area')">
+        <i class="fa fa-area-chart"></i>
+      </a>
+      <a class="command" title="Line" ng-click="chartChange('line')">
+        <i class="fa fa-line-chart"></i>
+      </a>
+      <a class="command" title="Tick" ng-click="chartChange('tick')">
+        <i class="fa fa-dot-circle-o"></i>
+      </a>
+      <a class="command" title="Text" ng-click="chartChange('text')">
+        <i class="fa fa-font"></i>
+      </a>
+
+
       <a ng-if="showLog && chart.vlSpec && log.support(chart.vlSpec, 'x')"  class="command"
         ng-click="log.toggle(chart.vlSpec, 'x')"
         ng-class="{active: log.active(chart.vlSpec, 'x')}">
@@ -85,19 +97,7 @@
         <i class="fa fa-refresh transpose"></i>
         <small ng-if="showLabel">Transpose</small>
       </a>
-      <a ng-if="showBookmark"
-        class="command"
-        ng-click="Bookmarks.toggle(chart)"
-        ng-class="{disabled: !chart.vlSpec.encoding, active: Bookmarks.isBookmarked(chart.shorthand)}">
-        <i class="fa fa-bookmark"></i>
-        <small ng-if="showLabel">Bookmark</small>
-      </a>
-      <a ng-if="showExpand"
-        ng-click="expandAction()"
-        class="command"
-        >
-        <i class="fa fa-expand"></i>
-      </a>
+
     </div>
   </div>
   <div class="vl-plot-wrapper full-width vis-{{fieldSet.key}} flex-grow-1">

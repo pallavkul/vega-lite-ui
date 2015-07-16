@@ -2,9 +2,9 @@
 /* globals window, angular */
 
 angular.module('vlui', [
-  'LocalStorageModule',
+
   'ui.select',
-  'angular-websql'
+
   ])
   .constant('_', window._)
   // datalib, vegalite, vega
@@ -12,7 +12,7 @@ angular.module('vlui', [
   .constant('vl', window.vl)
   .constant('vg', window.vg)
   // other libraries
-  .constant('Papa', window.Papa)
+
   .constant('Blob', window.Blob)
   .constant('URL', window.URL)
   .constant('Drop', window.Drop)
@@ -30,5 +30,5 @@ angular.module('vlui', [
       popup: 0,
       vislist: 1000
     },
-    myriaRest: 'http://ec2-52-1-38-182.compute-1.amazonaws.com:8753'
+    myriaRest: ''
   });
