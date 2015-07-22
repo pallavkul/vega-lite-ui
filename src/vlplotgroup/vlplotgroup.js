@@ -7,7 +7,7 @@
  * # visListItem
  */
 angular.module('vlui')
-  .directive('vlPlotGroup', function (consts, vl, Dataset, Drop, Logger, Spec) {
+  .directive('vlPlotGroup', function (consts, vl, Dataset, Drop, Logger) {
     return {
       templateUrl: 'vlplotgroup/vlplotgroup.html',
       restrict: 'E',
@@ -48,6 +48,7 @@ angular.module('vlui')
         isSelected: '=',
         highlighted: '=',
         expandAction: '&',
+        chartType: '='
       },
       link: function postLink(scope, element) {
 
@@ -131,11 +132,39 @@ angular.module('vlui')
         };
 
         scope.chartChange = function(chartType) {
-          Spec.spec.marktype = chartType;
-          scope.chart.vlSpec.marktype = chartType;
-          Logger.logInteraction(Logger.actions.MARK_CHANGE, scope.chart.vlSpec.marktype);
+          scope.chartType = chartType;
         };
 
+        scope.toggleFullscreen = function() {
+          var elements = document.getElementsByClassName("vl-plot-group");
+          if(elements.length > 0) {
+            var element = elements[0];
+            /*var req = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen;
+            req.call(element);*/
+            if (!document.fullscreenElement &&    // alternative standard method
+                !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+              if (element.requestFullscreen) {
+                element.requestFullscreen();
+              } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+              } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+              } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+              }
+            } else {
+              if (document.exitFullscreen) {
+                document.exitFullscreen();
+              } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+              } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+              } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+              }
+            }
+          }
+        }
         scope.$on('$destroy', function() {
           scope.chart = null;
           debugPopup.destroy();
