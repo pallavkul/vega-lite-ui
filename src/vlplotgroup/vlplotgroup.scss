@@ -79,6 +79,7 @@
   .toolbox {
     flex-grow: 0;
     flex-shrink: 0;
+    margin-right: 20px;
   }
   .field-set-info {
     flex-grow: 1;
@@ -86,14 +87,12 @@
 }
 
 .vl-plot-wrapper {
-  @extend .persist-scroll;
   min-height: 150px;
   max-height: 330px;
   min-width: 250px;
   overflow: hidden;
   text-align: center;
   display: flex;
-  position: relative;
 
   .vis.fit {
     width:100%;
@@ -107,24 +106,21 @@
   .vis.overflow {
     //cursor: pointer;
     width: 100%;
-    @extend .persist-scroll;
-
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0);
-    }
-    overflow: scroll;
+    overflow: hidden;
     &.scroll {
-      &::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.5);
-      }
+      @extend .persist-scroll;
+      overflow: scroll;
+      /* when-scroll add negative margin equal to the scrollbar size (in index.scss) */
+      margin-right: -11px;
+      margin-bottom: -11px;
     }
   }
 }
 
-// .vl-plot-group-group .dev-tool {
-//   visibility: hidden;
-// }
-
-// .vl-plot-group-group:hover .dev-tool{
-//   visibility:visible;
-// }
+.full-screen {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}

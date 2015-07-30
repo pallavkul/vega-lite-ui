@@ -153,16 +153,6 @@ angular.module('vlui')
       return schema;
     };
 
-    Dataset.getStats = function(data) {
-      // TODO add sampling back here, but that's less important for now
-      var summary = dl.summary(data);
-
-      return summary.reduce(function(s, profile) {
-        s[profile.field] = profile;
-        return s;
-      }, {count: data.length});
-    };
-
     // update the schema and stats
     Dataset.onUpdate = [];
 
@@ -180,25 +170,13 @@ angular.module('vlui')
         updatePromise = $http.get(dataset.url, {cache: true}).then(function(response) {
           var data;
 
-          // first see whether the data is JSON, otherwise try to parse CSV
+          // first see whether the data is JSON, otherwise shown an error
           if (_.isObject(response.data)) {
-             data = response.data;
-             Dataset.type = 'json';
+            data = response.data;
+            Dataset.type = 'json';
           } else {
-             var result = Papa.parse(response.data, {
-              dynamicTyping: true,
-              header: true
-            });
-
-            if (result.errors.length === 0) {
-              data = result.data;
-              Dataset.type = 'csv';
-            } else {
-              _.each(result.errors, function(err) {
-                Alerts.add(err.message, 2000);
-              });
-              return;
-            }
+            Alerts.add('Invalid data.', 2000);
+            return;
           }
 
           Dataset.updateFromData(dataset, data);
@@ -216,7 +194,7 @@ angular.module('vlui')
       Dataset.data = data;
 
       Dataset.currentDataset = dataset;
-      Dataset.stats = Dataset.getStats(Dataset.data);
+      Dataset.stats = vl.data.stats(Dataset.data);
       Dataset.dataschema = Dataset.getSchema(Dataset.data, Dataset.stats);
       Dataset.dataschema.byName = getNameMap(Dataset.dataschema);
     };

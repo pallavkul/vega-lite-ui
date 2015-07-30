@@ -7,8 +7,7 @@ angular.module('vlui')
 
     var renderQueue = new Heap(function(a, b){
         return b.priority - a.priority;
-      }),
-      rendering = false;
+      });
 
     function getRenderer(width, height) {
       // use canvas by default but use svg if the visualization is too big
@@ -37,6 +36,7 @@ angular.module('vlui')
         rescale: '=',
         thumbnail: '=',
         tooltip: '=',
+        rendering: '='
       },
       replace: true,
       link: function(scope, element) {
@@ -49,6 +49,7 @@ angular.module('vlui')
         scope.hoverFocus = false;
         scope.tooltipActive = false;
         scope.destroyed = false;
+        scope.rendering = false;
 
         scope.mouseover = function() {
           scope.hoverPromise = $timeout(function(){
@@ -65,7 +66,6 @@ angular.module('vlui')
           $timeout.cancel(scope.hoverPromise);
           scope.hoverFocus = scope.unlocked = false;
         };
-
         function viewOnMouseOver(event, item) {
           if (!item.datum.data) { return; }
 
@@ -153,8 +153,12 @@ angular.module('vlui')
             next.parse();
           } else {
             // or say that no one is rendering
-            rendering = false;
+            scope.rendering = false;
           }
+          $timeout(function() {
+            // This will be run on the next digest cycle preventing "[$rootScope:inprog] $digest already in progress" error
+            scope.$apply();
+          });
         }
 
         function render(spec) {
@@ -218,8 +222,8 @@ angular.module('vlui')
             });
           }
 
-          if (!rendering) { // if no instance is being render -- rendering now
-            rendering=true;
+          if (!scope.rendering) { // if no instance is being render -- rendering now
+            scope.rendering=true;
             parseVega();
           } else {
             // otherwise queue it

@@ -12,7 +12,7 @@ angular.module('vlui', [
   .constant('vl', window.vl)
   .constant('vg', window.vg)
   // other libraries
-
+  .constant('jQuery', window.$)
   .constant('Blob', window.Blob)
   .constant('URL', window.URL)
   .constant('Drop', window.Drop)
@@ -20,7 +20,7 @@ angular.module('vlui', [
   // constants
   .constant('consts', {
     addCount: true, // add count field to Dataset.dataschema
-    debug: true,
+    debug: false,
     useUrl: true,
     logging: false,
     defaultConfigSet: 'large',

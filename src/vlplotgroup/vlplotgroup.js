@@ -7,7 +7,7 @@
  * # visListItem
  */
 angular.module('vlui')
-  .directive('vlPlotGroup', function (consts, vl, Dataset, Drop, Logger) {
+  .directive('vlPlotGroup', function ($document, jQuery, consts, vl, Dataset, Drop, Logger) {
     return {
       templateUrl: 'vlplotgroup/vlplotgroup.html',
       restrict: 'E',
@@ -48,7 +48,8 @@ angular.module('vlui')
         isSelected: '=',
         highlighted: '=',
         expandAction: '&',
-        chartType: '='
+        chartType: '=',
+        rendering: '='
       },
       link: function postLink(scope, element) {
 
@@ -103,14 +104,6 @@ angular.module('vlui')
         };
         scope.toggleFilterNull.support = vl.Encoding.toggleFilterNullO.support;
 
-        var debugPopup = new Drop({
-          content: element.find('.dev-tool')[0],
-          target: element.find('.fa-wrench')[0],
-          position: 'bottom right',
-          openOn: 'click',
-          constrainToWindow: true
-        });
-
         scope.toggleSortClass = function(vlSpec) {
           var direction = vlSpec && vl.Encoding.toggleSort.direction(vlSpec),
             mode = vlSpec && vl.Encoding.toggleSort.mode(vlSpec);
@@ -136,38 +129,48 @@ angular.module('vlui')
         };
 
         scope.toggleFullscreen = function() {
-          var elements = document.getElementsByClassName("vl-plot-group");
-          if(elements.length > 0) {
-            var element = elements[0];
-            /*var req = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen;
-            req.call(element);*/
-            if (!document.fullscreenElement &&    // alternative standard method
-                !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
-              if (element.requestFullscreen) {
-                element.requestFullscreen();
-              } else if (element.msRequestFullscreen) {
-                element.msRequestFullscreen();
-              } else if (element.mozRequestFullScreen) {
-                element.mozRequestFullScreen();
-              } else if (element.webkitRequestFullscreen) {
-                element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-              }
-            } else {
-              if (document.exitFullscreen) {
-                document.exitFullscreen();
-              } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-              } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-              } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-              }
+          var el = element[0];
+
+          if (!document.fullscreenElement &&    // alternative standard method
+              !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+            jQuery(el).addClass('full-screen');
+            jQuery(el).find('.vl-plot-wrapper').addClass('full-screen');
+            if (el.requestFullscreen) {
+              el.requestFullscreen();
+            } else if (el.msRequestFullscreen) {
+              el.msRequestFullscreen();
+            } else if (el.mozRequestFullScreen) {
+              el.mozRequestFullScreen();
+            } else if (el.webkitRequestFullscreen) {
+              el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+          } else {
+            jQuery(el).removeClass('full-screen');
+            jQuery(el).find('.vl-plot-wrapper').removeClass('full-screen');
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+            } else if (document.msExitFullscreen) {
+              document.msExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+              document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+              document.webkitExitFullscreen();
             }
           }
-        }
+        };
+
+        // Handle exit full screen by pressing Esc key
+        $document.bind('webkitfullscreenchange mozfullscreenchange fullscreenchange',function(){
+          var el = element[0];
+          if(document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen) {
+            // Entering full screen mode
+          } else {
+            jQuery(el).removeClass('full-screen');
+            jQuery(el).find('.vl-plot-wrapper').removeClass('full-screen');
+          }
+        });
         scope.$on('$destroy', function() {
           scope.chart = null;
-          debugPopup.destroy();
         });
       }
     };

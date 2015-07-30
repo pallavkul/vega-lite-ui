@@ -16,10 +16,10 @@
       ></field-info>
     </div>
     <div class="toolbox">
-      <a ng-show="consts.debug && showDebug"
+      <!--<a ng-show="consts.debug && showDebug"
         class="command debug">
         <i class="fa fa-wrench" ng-click="shCopied=''; vlCopied=''; vgCopied='';"></i>
-      </a>
+      </a>-->
       <div class="drop-container">
         <div class="popup-menu popup-command no-shrink dev-tool">
           <div class="command debug">
@@ -53,22 +53,22 @@
         </div>
       </div>
 
-      <a ng-class="{command: true, active: chartType==='point'}" title="Point" ng-click="chartChange('point')">
+      <a ng-if="showMarkType" ng-class="{command: true, active: chartType==='point'}" title="Point" ng-click="chartChange('point')">
         <i class="fa fa-circle-o"></i>
       </a>
-      <a ng-class="{command: true, active: chartType==='bar'}" title="Bar" ng-click="chartChange('bar')">
+      <a ng-if="showMarkType" ng-class="{command: true, active: chartType==='bar'}" title="Bar" ng-click="chartChange('bar')">
         <i class="fa fa-bar-chart"></i>
       </a>
-      <a ng-class="{command: true, active: chartType==='area'}" title="Area" ng-click="chartChange('area')">
+      <a ng-if="showMarkType" ng-class="{command: true, active: chartType==='area'}" title="Area" ng-click="chartChange('area')">
         <i class="fa fa-area-chart"></i>
       </a>
-      <a ng-class="{command: true, active: chartType==='line'}" title="Line" ng-click="chartChange('line')">
+      <a ng-if="showMarkType" ng-class="{command: true, active: chartType==='line'}" title="Line" ng-click="chartChange('line')">
         <i class="fa fa-line-chart"></i>
       </a>
-      <a ng-class="{command: true, active: chartType==='tick'}" title="Tick" ng-click="chartChange('tick')">
+      <a ng-if="showMarkType" ng-class="{command: true, active: chartType==='tick'}" title="Tick" ng-click="chartChange('tick')">
         <i class="fa fa-dot-circle-o"></i>
       </a>
-      <a ng-class="{command: true, active: chartType==='text'}" title="Text" ng-click="chartChange('text')">
+      <a ng-if="showMarkType" ng-class="{command: true, active: chartType==='text'}" title="Text" ng-click="chartChange('text')">
         <i class="fa fa-font"></i>
       </a>
 
@@ -130,6 +130,7 @@
       rescale="rescale"
       thumbnail="thumbnail"
       tooltip="tooltip"
+      rendering="rendering"
     ></vl-plot>
   </div>
 </div>
