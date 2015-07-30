@@ -41,13 +41,3 @@ git tag -am "Release v$version." "v$version"
 git push --tags
 git checkout master
 gulp build
-
-# 2. NPM PUBLISH
-
-npm publish
-# exit if npm publish failed
-rc=$?
-if [[ $rc != 0 ]]; then
-  echo "${RED} npm publish failed.  Publishing canceled. ${NC} \n\n"
-  exit $rc;
-fi
